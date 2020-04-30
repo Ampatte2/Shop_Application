@@ -1,10 +1,9 @@
 import React from 'react'
 
-export default function Products() {
+export default function AdminInventory() {
     return (
         <div>
-            Products
-            
+            Inventory
         </div>
     )
 }

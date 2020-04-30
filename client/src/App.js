@@ -1,8 +1,10 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
-import {About, Account, Admin, Login, Products} from "./pages"
+import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {About, Account, Login, Products} from "./pages"
+import {AdminAccount, AdminInventory, AdminLogin} from "./admin"
 import Navbar from './components/Navbar';
+import NavbarBottom from "./components/NavbarBottom";
 
 function App() {
   return (
@@ -16,17 +18,13 @@ function App() {
         <Route path="/" exact component = {Products}/>
         <Route path="/about" exact component = {About}/>
         <Route path="/account" exact component = {Account}/>
-        <Route path="/admin" exact component = {Admin}/>
         <Route path="/login" exact component = {Login}/>
+        <Route path="/admin" exact component = {AdminLogin}/>
+        <Route path="/admin/account" exact component = {AdminAccount}/>
+        <Route path="/admin/inventory" exact component = {AdminInventory}/>
       </Switch>
 
-      <div>
-        <Link to="/">Products</Link>
-        <Link to="/about">About</Link>
-        <Link to="/account">Account</Link>
-        <Link to="/admin">Admin</Link>
-        <Link to="/login">Login</Link>
-      </div>
+      <NavbarBottom></NavbarBottom>
 
       </Router>
     </div>

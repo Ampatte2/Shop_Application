@@ -1,9 +1,8 @@
 import React from 'react'
 
-export default function Products() {
+export default function AdminOrders() {
     return (
         <div>
-            Products
             
         </div>
     )
