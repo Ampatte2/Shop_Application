@@ -13,3 +13,5 @@ export const postAdminLogin = payload => api.post("/adminLogin", payload).then((
 export const postGetData = payload => api.post("/getData", payload).then((response)=>{return response});
 
 export const postUserData = payload => api.post("/getUser", payload).then((response)=>{return response});
+
+export const postSearch = payload => api.post("/search", payload).then((response)=>{return response});

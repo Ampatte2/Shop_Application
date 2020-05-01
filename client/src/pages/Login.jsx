@@ -1,15 +1,17 @@
 import React, {useState} from 'react'
 import {useSelector, useDispatch} from "react-redux";
 import {userLogin, userRegister, isError} from "../store/actions"
+import { Redirect } from 'react-router-dom';
 
 export default function Login() {
 
     const [pass, setPass] = useState(false);
     const [user, setUser] = useState({email:"", password: "", repeat:""})
     const [signUp, setSignUp] = useState(false);
-    const errorMessage = useSelector(state=> state.Error);
+    const errorMessage = useSelector(state=> state.main.Error);
+    const auth = useSelector(state=>state.main.Auth);
     const dispatch = useDispatch();
-
+    
     const handleSubmit = (e) =>{
         e.preventDefault();
         dispatch(userLogin(user));
@@ -36,7 +38,7 @@ export default function Login() {
 
     return (
         <div>
-
+            {auth && <Redirect to="/account"/>}
             <form onSubmit={signUp ? handleRegister : handleSubmit}>
             <input placeholder="Email" name="email" onChange={(e)=>handleChange(e)} value={user.email}></input>
             <input placeholder="Password" name="password" onChange={(e)=>handleChange(e)} value={user.password}></input>

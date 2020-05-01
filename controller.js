@@ -33,7 +33,6 @@ login = async(req,res) =>{
             reject(new Error("No user"));
         }
     }))
-    .catch(err=>console.log("bcrypt error"))
     .then(async (response)=>{
         await new Promise((resolve, reject)=>bcrypt.compare(password, response[0].password).then(result=>{
             if(result){
@@ -44,7 +43,7 @@ login = async(req,res) =>{
             }
         }))
     })
-    .catch(err=>console.log("bcrypt error")); 
+    .catch(err=>{return err}); 
 
 }
 
@@ -62,7 +61,6 @@ register = async(req,res) =>{
             })
         })
     })
-    .catch(err=>console.log("bcrypt error"))
     .then(async (hash) => await new Promise((resolve,reject)=>{
         
         connection.query("INSERT INTO users VALUES (null, "+SqlS.escape(email)+", "+SqlS.escape(hash)+" ,FALSE)", 
@@ -74,7 +72,7 @@ register = async(req,res) =>{
                 resolve(res.send({error:false, token:userToken}))
             }
         })
-    }).catch(err=>console.log(err)))
+    }).catch(err=>{return err}))
 }
 
 getData = async(req,res)=>{
@@ -101,30 +99,32 @@ adminLogin = async(req,res)=>{
             reject(new Error("No user"));
         }
     }))
-    .catch(err=>console.log("first error"))
     .then(async (response)=>{
-        await new Promise((resolve, reject)=>bcrypt.compare(password, response[0].password).then(result=>{
-            //nest the new promise possibly
+        
+        await new Promise((resolve, reject)=>bcrypt.compare(password, response[0].password, (err,result)=>{
+            
             if(result){
-                let userToken = tokenGen(response[0].id);
+                userToken = tokenGen(response[0].id);
                 resolve(userToken);
             }else{
                 reject(res.send({error:"Username or Password is Incorrect"}))
             }
-        })).catch(err=>console.log("second error"))
-    }).catch(err=>console.log("second error")).then(async (userToken)=>{
-        //Does not get the usertoken from the previous async await
-        
-        await new Promise((resolve, reject)=>connection.query("SELECT * FROM orders ORDER BY date LIMIT 5", (err, response)=>{
-            if(userToken){
-                res.send({token:userToken, orders:response[0]})
-                resolve()
-            }else{
-                reject(new Error("Server Error"))
-            }
+
         }))
-    })
-    .catch(err=>console.log(err));
+        .then( async (userToken)=>{
+            
+            await new Promise((resolve, reject)=>connection.query("SELECT * FROM orders ORDER BY date LIMIT 5", (err, response)=>{
+                if(userToken){
+                    res.send({token:userToken, orders:response[0]})
+                    resolve()
+                }else{
+                    reject(new Error("Server Error"))
+                }
+            }))
+        })
+
+    }).catch(err=>{return err})
+    
 
 }
 

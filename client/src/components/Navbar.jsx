@@ -1,27 +1,36 @@
 import React  from 'react'
-import {Link, useLocation} from "react-router-dom"
-import {useSelector} from "react-redux";
+import {Link} from "react-router-dom"
+import {useSelector, useDispatch} from "react-redux";
+import {isAuth, isAdmin} from "../store/actions"
 
 
-export default function Navbar() {
-    const location = useLocation().pathname
-    const auth = useSelector(state=>state.Auth)
+export const Navbar =(props) => {
+    const auth = useSelector(state=>state.main.Auth)
+    const dispatch = useDispatch();
+
+    const lgout =()=>{
+        localStorage.removeItem("token");
+        dispatch(isAuth(false));
+        dispatch(isAdmin(false));
+    }
     
     let navBar =    <div>
                         <div>
                             <Link to="/">Products</Link>
                             <Link to="/about">About</Link>
-                            <Link to="/account">Account</Link>
-                            {auth ? <button>Logout</button> : <Link to="/login">Login</Link>}
+                            
+                            {auth ? <><Link to="/account">Account</Link><button onClick={()=>lgout()}>Logout</button></> : <Link to="/login">Login</Link>}
                         </div>
                         <div>
                             Offers
                         </div>
                     </div>;
-    if(location.substring(0,7) === "/admin/"){
+    if(props.view==="admin"){
         navBar =    <div>
-                    <Link to="/admin/inventory">Inventory</Link>
-                    <Link to="/admin/account">Account</Link>
+                    <Link to="/admin/main/inventory">Inventory</Link>
+                    <Link to="/admin/main/account">Account</Link>
+                    <Link to="/admin/main/orders">Orders</Link>
+                    <button onClick={()=>lgout()}>Logout</button>
                     </div>
     }
     return (

@@ -10,6 +10,10 @@ export function isAuth(value){
     return {type:type.IS_AUTH, value}
 }
 
+export function isAdmin(value){
+    return {type:type.IS_ADMIN, value}
+}
+
 export function isError(error){
     return {type:type.IS_ERROR, error}
 }
@@ -80,7 +84,10 @@ export function adminLogin(user){
             if(res.data.error){                    
                     dispatch(isError(res.data.error))
             }else{
+                console.log("fired")
+                localStorage.setItem("token", res.data.token);
                 batch(()=>{
+                    dispatch(isAdmin(true))
 
                 })
             }
