@@ -4,7 +4,8 @@ import type from "../actions/type";
 const initialState = {
     Loaded:true,
     Auth: false,
-    Error: false
+    Error: false,
+    Products: []
 }
 
 const shopState = (state=initialState, action) =>{
@@ -15,6 +16,8 @@ const shopState = (state=initialState, action) =>{
             return Object.assign({}, state, {Auth: action.value});
         case type.IS_ERROR:
             return Object.assign({}, state, {Error: action.error});
+        case type.PRODUCTS:
+            return Object.assign({}, state, {Products: [...action.value]})
         default:
             return state;
     }

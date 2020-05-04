@@ -10,7 +10,7 @@ export const postRegister = payload => api.post("/register", payload).then((resp
 
 export const postAdminLogin = payload => api.post("/adminLogin", payload).then((response)=>{return response});
 
-export const postGetData = payload => api.post("/getData", payload).then((response)=>{return response});
+export const postGetData = payload => api.post("/getData", payload).then((response)=>{console.log(response.data);return response});
 
 export const postUserData = payload => api.post("/getUser", payload).then((response)=>{return response});
 

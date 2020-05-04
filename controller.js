@@ -25,7 +25,7 @@ login = async(req,res) =>{
     const email = req.body.email;
     const password = req.body.password;
     
-    await new Promise ((resolve, reject)=>connection.query("SELECT id, email, password FROM users WHERE email=("+SqlS.escape(email)+")", (err,response)=>{
+    await new Promise ((resolve, reject)=>connection.query(`SELECT id, email, password FROM users WHERE email=(${SqlS.escape(email)})`, (err,response)=>{
         if(response){
             resolve(response);
         }else{
@@ -76,7 +76,24 @@ register = async(req,res) =>{
 }
 
 getData = async(req,res)=>{
+    
+    const {index1, index2, listPrice, salePrice, description, product, category} = req.body;
+     console.log(req.body)
+    
+    await new Promise((resolve, reject)=>connection.query(`SELECT * FROM shop_data 
+    WHERE listing_price < ${SqlS.escape(listPrice || 100000)} 
+    AND sale_price < ${SqlS.escape(salePrice || 100000)} 
+    AND description LIKE"%${description ? description: ``}%" 
+    AND product_name LIKE"%${product ? product : ``}%" 
+    AND product_name LIKE"${category ? category : ``}%"
+    LIMIT ${SqlS.escape(index1)} , ${SqlS.escape(index2)}`, (err, response)=>{
 
+        if(response.length>1){
+            resolve(res.send(response))
+        }else{
+            reject(res.send({error:"No Results For the Search"}))
+        }
+    })).catch(err=>console.log(err))
 }
 
 getUser = async(req,res)=>{
@@ -115,7 +132,7 @@ adminLogin = async(req,res)=>{
             
             await new Promise((resolve, reject)=>connection.query("SELECT * FROM orders ORDER BY date LIMIT 5", (err, response)=>{
                 if(userToken){
-                    res.send({token:userToken, orders:response[0]})
+                    res.send({token:userToken, orders:[response[0]]})
                     resolve()
                 }else{
                     reject(new Error("Server Error"))
@@ -128,8 +145,8 @@ adminLogin = async(req,res)=>{
 
 }
 
-search = async(req,res) =>{
-    
+adminGetData = async (req,res) =>{
+
 }
 
 
@@ -140,5 +157,6 @@ module.exports = {
     connection,
     getData,
     getUser,
-    adminLogin
+    adminLogin,
+    adminGetData
 }

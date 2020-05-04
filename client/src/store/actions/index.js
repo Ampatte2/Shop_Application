@@ -3,19 +3,26 @@ import {postLogin, postRegister, postGetData, postUserData, postAdminLogin} from
 import {batch} from "react-redux"
 
 export function isLoaded(value){
-    return {type:type.IS_LOADED, value}
+    return {type: type.IS_LOADED, value}
 }
 
 export function isAuth(value){
-    return {type:type.IS_AUTH, value}
+    return {type: type.IS_AUTH, value}
 }
 
 export function isAdmin(value){
-    return {type:type.IS_ADMIN, value}
+    return {type: type.IS_ADMIN, value}
 }
 
 export function isError(error){
-    return {type:type.IS_ERROR, error}
+    return {type: type.IS_ERROR, error}
+}
+
+export function adminOrders(value){
+    return {type: type.ADMIN_ORDERS, value}
+}
+export function products(value){
+    return {type: type.PRODUCTS, value}
 }
 
 export function userLogin(user){
@@ -66,11 +73,21 @@ export function userData(token){
         })
     }
 }
-export function getData(){
-    return function(dispatch){
-        dispatch(isLoaded(false))
-        return postGetData().then(res=>{
 
+export function getData(data){
+    return function(dispatch){
+        dispatch(isLoaded(false));
+        return postGetData(data).then(res=>{
+            if(res.data.error){
+                dispatch(isError(res.data.error))
+            }else{
+                
+                batch(()=>{
+                    dispatch(products(res.data))
+                    dispatch(isError(false))
+                    });
+            }
+            
         })
     }
 }
@@ -84,11 +101,11 @@ export function adminLogin(user){
             if(res.data.error){                    
                     dispatch(isError(res.data.error))
             }else{
-                console.log("fired")
+                
                 localStorage.setItem("token", res.data.token);
                 batch(()=>{
                     dispatch(isAdmin(true))
-
+                    dispatch(adminOrders(res.data.orders))
                 })
             }
 

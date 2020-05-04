@@ -10,9 +10,9 @@ function App() {
     <>
       <Router>
       <Switch>
-        <Route path="/" exact component = {Client}/>
-        <Route path="/admin/main" exact component = {Admin}/>
-        <Route path="/admin" exact component = {AdminLogin}/>
+        <Route path="/admin/main" component = {Admin}/>
+        <Route path="/admin" component = {AdminLogin}/>
+        <Route path="/" component = {Client}/>
       </Switch>
       </Router>
     </>
