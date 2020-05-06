@@ -11,9 +11,8 @@ export const Client = () => {
     const dispatch = useDispatch();
 
     useEffect(()=>{
-        dispatch(getData({index1: 1, index2: 10}))
-    }, [])
-    
+        dispatch(getData({index1: 1, index2: 10, category:"men"}))
+    }, []);
  
     return (
         <div>

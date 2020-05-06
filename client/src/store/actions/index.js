@@ -24,6 +24,9 @@ export function adminOrders(value){
 export function products(value){
     return {type: type.PRODUCTS, value}
 }
+export function category(value){
+    return {type: type.CATEGORY, value}
+}
 
 export function userLogin(user){
     return function(dispatch){
@@ -85,6 +88,7 @@ export function getData(data){
                 batch(()=>{
                     dispatch(products(res.data))
                     dispatch(isError(false))
+                    dispatch(category(data.category))
                     });
             }
             

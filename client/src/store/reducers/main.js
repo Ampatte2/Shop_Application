@@ -5,6 +5,7 @@ const initialState = {
     Loaded:true,
     Auth: false,
     Error: false,
+    Category:undefined,
     Products: []
 }
 
@@ -18,6 +19,8 @@ const shopState = (state=initialState, action) =>{
             return Object.assign({}, state, {Error: action.error});
         case type.PRODUCTS:
             return Object.assign({}, state, {Products: [...action.value]})
+        case type.CATEGORY:
+            return Object.assign({}, state, {Category: action.value})
         default:
             return state;
     }

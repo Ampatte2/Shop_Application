@@ -2,6 +2,7 @@ import React  from 'react'
 import {Link} from "react-router-dom"
 import {useSelector, useDispatch} from "react-redux";
 import {isAuth, isAdmin} from "../store/actions"
+import { SearchBar } from './SearchBar';
 
 
 export const Navbar =(props) => {
@@ -21,9 +22,6 @@ export const Navbar =(props) => {
                             
                             {auth ? <><Link to="/account">Account</Link><button onClick={()=>lgout()}>Logout</button></> : <Link to="/login">Login</Link>}
                         </div>
-                        <div>
-                            Offers
-                        </div>
                     </div>;
     if(props.view==="admin"){
         navBar =    <div>
@@ -36,6 +34,7 @@ export const Navbar =(props) => {
     return (
         <>
             {navBar}
+            <SearchBar/>
         </>
     )
 }

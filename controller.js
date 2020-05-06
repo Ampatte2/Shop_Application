@@ -78,15 +78,15 @@ register = async(req,res) =>{
 getData = async(req,res)=>{
     
     const {index1, index2, listPrice, salePrice, description, product, category} = req.body;
-     console.log(req.body)
+    console.log(index1, index2, listPrice, salePrice, description, product, category)
     
     await new Promise((resolve, reject)=>connection.query(`SELECT * FROM shop_data 
     WHERE listing_price < ${SqlS.escape(listPrice || 100000)} 
     AND sale_price < ${SqlS.escape(salePrice || 100000)} 
     AND description LIKE"%${description ? description: ``}%" 
     AND product_name LIKE"%${product ? product : ``}%" 
-    AND product_name LIKE"${category ? category : ``}%"
-    LIMIT ${SqlS.escape(index1)} , ${SqlS.escape(index2)}`, (err, response)=>{
+    AND product_name REGEXP "([^a-z]|^)${category ? category : ``}"
+    LIMIT ${SqlS.escape(index1 || 0)} , ${SqlS.escape(index2 || 10)}`, (err, response)=>{
 
         if(response.length>1){
             resolve(res.send(response))
